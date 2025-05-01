@@ -8,6 +8,13 @@
 import SwiftUI
 
 struct HomeView: View {
+    
+    // MARK: - PROPERTIES
+    
+    @State private var isAnimating: Bool = false
+    @State private var isRepeatAnimating: Bool = false
+    @State private var isOnboardingViewActive: Bool = false
+    
     var body: some View {
         VStack(spacing: 16) {
             Spacer()
@@ -21,6 +28,14 @@ struct HomeView: View {
                     Image("character-2")
                         .resizable()
                         .scaledToFit()
+                        .padding()
+                        .offset(y: isRepeatAnimating ? 35 : -35)
+                        .animation(
+                            Animation
+                                .easeInOut(duration: 4)
+                                .repeatForever(),
+                            value: isAnimating
+                        )
                 }
                 .frame(width: 320, alignment: .center)
                 .padding()
@@ -32,7 +47,9 @@ struct HomeView: View {
                     .padding()
             Spacer()
             Button {
-                
+                withAnimation {
+                    isOnboardingViewActive = true
+                }
             } label: {
                 Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
                     .imageScale(.large)
@@ -44,6 +61,16 @@ struct HomeView: View {
             .buttonBorderShape(.capsule)
             .controlSize(.large)
         } //: VSTACK
+        .blur(radius: isAnimating ? 0 : 10)
+        .opacity(isAnimating ? 1 : 0)
+        .scaleEffect(isAnimating ? 1 : 0.5)
+        .animation(.easeOut(duration: 1), value: isAnimating)
+        .onAppear(perform: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                isAnimating = true
+                isRepeatAnimating = true
+            })
+        })
     }
 }
 
