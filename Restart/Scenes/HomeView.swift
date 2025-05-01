@@ -14,6 +14,7 @@ struct HomeView: View {
     @State private var isAnimating: Bool = false
     @State private var isRepeatAnimating: Bool = false
     @State private var isOnboardingViewActive: Bool = false
+    @State private var audioPlayer: AudioPlayer = .init()
     
     var body: some View {
         VStack(spacing: 16) {
@@ -49,6 +50,8 @@ struct HomeView: View {
             Button {
                 withAnimation {
                     isOnboardingViewActive = true
+                    audioPlayer.playSound(sound: "success", type: "m4a")
+                    
                 }
             } label: {
                 Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
